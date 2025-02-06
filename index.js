@@ -60,6 +60,7 @@ app.use("/auth", authRoutes);
 app.use("/url", urlRoutes);
 app.use("/analytics", analyticsRoutes);
 
+// Redirect url
 app.get("/:shortId", redirectToOriginalUrl);
 
 app.get("/health/test", (req, res) => {

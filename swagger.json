@@ -225,6 +225,234 @@
           }
         }
       }
+    },
+    "/short": {
+      "post": {
+        "summary": "Generate a short URL",
+        "description": "Generates a short URL for the provided long URL. Optionally, a custom alias can be provided.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "redirectURL": {
+                    "type": "string",
+                    "format": "uri",
+                    "example": "https://example.com/very-long-url",
+                    "description": "The original URL to be shortened."
+                  },
+                  "customAlias": {
+                    "type": "string",
+                    "example": "my-custom-alias",
+                    "description": "Optional custom alias for the short URL."
+                  },
+                  "topic": {
+                    "type": "string",
+                    "example": "technology",
+                    "description": "Optional topic/category for the URL."
+                  }
+                },
+                "required": ["redirectURL"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Short URL created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Short URL created successfully!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "shortId": {
+                          "type": "string",
+                          "example": "abc123"
+                        },
+                        "shortURL": {
+                          "type": "string",
+                          "format": "uri",
+                          "example": "http://localhost:3000/abc123"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Redirect URL is required."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User id is required, please login and try again."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error, debug main block : generateNewShortURL"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{shortId}": {
+      "get": {
+        "summary": "Redirect to the original URL",
+        "description": "Redirects the user to the original URL associated with the provided short ID.",
+        "parameters": [
+          {
+            "name": "shortId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "abc123",
+            "description": "The short ID of the URL."
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Redirects to the original URL."
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error processing request, short Id not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   }
-}
+} 
