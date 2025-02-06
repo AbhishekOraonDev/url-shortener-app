@@ -1,0 +1,63 @@
+{
+    "family": "url-shortener-task",
+    "executionRoleArn": "arn:aws:iam::992382518819:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512",
+    "containerDefinitions": [
+        {
+            "name": "url-shortener-app",
+            "image": "992382518819.dkr.ecr.ap-south-1.amazonaws.com/url-shortener-app:latest",
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "protocol": "tcp"
+                }
+            ],
+            "environment": [
+                {
+                    "name": "PORT",
+                    "value": "3000"
+                }
+            ],
+            "secrets": [
+                {
+                    "name": "GOOGLE_CLIENT_ID",
+                    "valueFrom": "arn:aws:ssm:ap-south-1:992382518819:parameter/url-shortener/google-client-id"
+                },
+                {
+                    "name": "GOOGLE_CLIENT_SECRET",
+                    "valueFrom": "arn:aws:ssm:ap-south-1:992382518819:parameter/url-shortener/google-client-secret"
+                },
+                {
+                    "name": "SESSION_SECRET",
+                    "valueFrom": "arn:aws:ssm:ap-south-1:992382518819:parameter/url-shortener/session-secret"
+                },
+                {
+                    "name": "MONGO_URI",
+                    "valueFrom": "arn:aws:ssm:ap-south-1:992382518819:parameter/url-shortener/mongo-uri"
+                },
+                {
+                    "name": "REDIS_HOST",
+                    "valueFrom": "arn:aws:ssm:ap-south-1:992382518819:parameter/url-shortener/redis_host"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/url-shortener-app-task",
+                    "awslogs-region": "ap-south-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            },
+            "linuxParameters": {
+                "initProcessEnabled": true
+            }
+        }
+    ],
+    "enableExecuteCommand": true
+}
