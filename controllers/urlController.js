@@ -139,7 +139,7 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
             analyticsData = await updateAnalytics(analyticsData, userAgent, userIP);
 
             // Save to database and update cache
-            if (analyticsData instanceof Analytics) {
+            if (analyticsData.isNew) {
                 await analyticsData.save();
             } else {
                 await Analytics.findOneAndUpdate(
