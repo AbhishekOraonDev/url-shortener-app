@@ -93,7 +93,7 @@ const generateNewShortURL = catchAsyncError(async (req, res, next) => {
 const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
 
     // check for shortId in the url
-    const { shortId } = req.params
+    const { shortId } = req.params;
     if (!shortId) return next(new ErrorHandler("Error processing request, short Id not found.", 400));
 
     try {
