@@ -139,25 +139,15 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
             analyticsData = await updateAnalytics(analyticsData, userAgent, userIP);
 
 
-            // Save to database and update cache
-            if (analyticsData.isNew) {
+            // Save or update analytics data
+            if (!analyticsData._id) {
+                // If it's a new document, save it
                 await analyticsData.save();
             } else {
-                // const analyticsDataToUpdate = { ...analyticsData.toObject() };
-                // delete analyticsDataToUpdate._id;
-    
-                // await Analytics.findOneAndUpdate(
-                //     { urlId: cachedUrl._id },
-                //     analyticsDataToUpdate,
-                //     { upsert: true, returnDocument: 'after' }
-                // );
-
-                const analyticsDataToUpdate = JSON.parse(JSON.stringify(analyticsData));
-                delete analyticsDataToUpdate._id;
-
+                // If it's an existing document, update it
                 await Analytics.findOneAndUpdate(
-                    { urlId: cachedUrl._id },
-                    analyticsDataToUpdate,
+                    { _id: analyticsData._id },
+                    analyticsData,
                     { upsert: true, returnDocument: 'after' }
                 );
             }
@@ -261,7 +251,18 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
         }
 
         // Save the updated analytics data
-        await analyticsData.save();
+        // Save or update analytics data
+        if (!analyticsData._id) {
+            // If it's a new document, save it
+            await analyticsData.save();
+        } else {
+            // If it's an existing document, update it
+            await Analytics.findOneAndUpdate(
+                { _id: analyticsData._id },
+                analyticsData,
+                { upsert: true, returnDocument: 'after' }
+            );
+        }
 
         await redisClient.set(`analytics:${shortId}`, JSON.stringify(analyticsData), 'EX', 3600);
 
