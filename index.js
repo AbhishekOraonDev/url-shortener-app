@@ -60,7 +60,7 @@ app.get("/health/test", (req, res) => {
 })
 
 app.get("/", (req, res) => {
-    req.json({
+    res.json({
         success: true,
         message: "This is an url-shortener backend application, developed by Abhishek Oraon."
     })
