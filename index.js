@@ -53,7 +53,7 @@ app.use("/api/analytics", analyticsRoutes);
 
 app.get("/:shortId", redirectToOriginalUrl);
 
-app.get("/health", (req, res) => {
+app.get("/health/test", (req, res) => {
     res.json({
         message: "Every thing is working fine"
     })
