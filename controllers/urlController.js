@@ -145,7 +145,7 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
                 await Analytics.findOneAndUpdate(
                     { urlId: cachedUrl._id },
                     analyticsData,
-                    { new: true, upsert: true }
+                    { upsert: true, returnDocument: 'after' }
                 );
             }
 
@@ -170,21 +170,14 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
         if (!analyticsData) {
 
             // If analytics data is not present
-            analyticsData = await Analytics.findOneAndUpdate(
-                { urlId: urlData._id }, 
-                { 
-                    $setOnInsert: {
-                        urlId: urlData._id,
-                        totalClicks: 0,
-                        uniqueUsers: { count: 0, uniqueUserIps: [] },
-                        clicksByDate: [],
-                        osType: [],
-                        deviceType: [],
-                    }
-                },
-                { new: true, upsert: true }
-            );
-            
+            analyticsData = new Analytics({
+                urlId: urlData._id,
+                totalClicks: 0,
+                uniqueUsers: { count: 0, uniqueUserIps: [] },
+                clicksByDate: [],
+                osType: [],
+                deviceType: [],
+            });
         }
 
         // Update total clicks (Using IP for now might change to UUID store cookie)
