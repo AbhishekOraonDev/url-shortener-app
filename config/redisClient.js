@@ -6,7 +6,7 @@ dotenv.config();
 // Use the Redis service name from Docker Compose
 const redisClient = new Redis({
     host: process.env.REDIS_HOST,
-    port: 6379,
+    port: process.env.REDISPORT || 6379,
 
     retryStrategy: (times) => {
         const delay = Math.min(times * 50, 2000);
