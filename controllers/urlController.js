@@ -109,7 +109,7 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
         }
 
         if (cachedUrl) {
-            cachedUrl = JSON.parse(cachedUrl)
+            cachedUrl = JSON.parse(cachedUrl);
             console.log("Cache Hit: Redirecting from Redis");
             // console.log("cachedUrl: ", cachedUrl);
 
@@ -253,7 +253,7 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
         await redisClient.set(`analytics:${shortId}`, JSON.stringify(analyticsData), 'EX', 3600);
 
         // Cache the URL for future requests
-        await redisClient.set(`shortUrl:${shortId}`, urlData.redirectURL, 'EX', 86400);
+        await redisClient.set(`shortUrl:${shortId}`, JSON.stringify(urlData.redirectURL), 'EX', 86400);
 
         console.log("Cache Miss: Redirecting from DB");
 
