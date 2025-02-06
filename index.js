@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import swaggerUi from "swagger-ui-express";
-import swaggerData from "./swagger.json";
+import swaggerData from "./swagger.json" assert { type: "json" };
 
 
 
