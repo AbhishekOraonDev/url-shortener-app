@@ -68,12 +68,19 @@ const generateNewShortURL = catchAsyncError(async (req, res, next) => {
             console.error("Redis error while setting short URL:", error);
         }
 
+
+        // Determine the protocol (http or https)
+        const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+
+        // Generate the short URL with the correct protocol
+        const shortURL = `${protocol}://${req.get("host")}/${shortId}`;
+
         res.status(201).json({
             success: true,
             message: `Short URL created successfully!`,
             data: {
                 shortId,
-                shortURL: `${req.protocol}://${req.get("host")}/${shortId}`,
+                shortURL: shortURL,
             },
         });
 
