@@ -6,6 +6,10 @@ import { connectDB } from './config/dbConnection.js';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import swaggerUi from "swagger-ui-express";
+import swaggerData from "./swagger.json";
+
+
 
 // Middlewares
 import errorMiddleware from './middleware/errorMiddleware.js';
@@ -54,7 +58,7 @@ app.set('trust proxy', 1);
 //----------------Routes------------------------
 app.use("/auth", authRoutes);
 app.use("/url", urlRoutes);
-app.use("/api/analytics", analyticsRoutes);
+app.use("/analytics", analyticsRoutes);
 
 app.get("/:shortId", redirectToOriginalUrl);
 
@@ -70,6 +74,9 @@ app.get("/", (req, res) => {
         message: "This is an url-shortener backend application, developed by Abhishek Oraon."
     })
 })
+
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerData));
 
 //--------------Error Middleware----------------
 app.use(errorMiddleware);

@@ -1,0 +1,230 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "URL Shortener API",
+    "description": "A simple API to shorten long URLs and retrieve analytics.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://url-shortener-app-production.up.railway.app",
+      "description": "production server at railways."
+    }
+  ],
+  "paths": {
+    "/auth/google": {
+      "get": {
+        "summary": "Initiate Google OAuth login",
+        "description": "Redirects the user to Google's OAuth login page.",
+        "responses": {
+          "302": {
+            "description": "Redirect to Google OAuth login page"
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "summary": "Google OAuth callback",
+        "description": "Handles the callback from Google OAuth after authentication. Redirects to success or failure URL based on authentication result.",
+        "responses": {
+          "302": {
+            "description": "Redirects to `/auth/success` on successful authentication or `/auth/login-failed` on failure."
+          }
+        }
+      }
+    },
+    "/auth/success": {
+      "get": {
+        "summary": "Login success",
+        "description": "Returns user details if authentication is successful.",
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login successful"
+                    },
+                    "user": {
+                      "type": "object",
+                      "description": "Authenticated user details"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized, login failed."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login-failed": {
+      "get": {
+        "summary": "Login failed",
+        "description": "Returns an error message if login fails.",
+        "responses": {
+          "401": {
+            "description": "Login failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login failed."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/profile": {
+      "get": {
+        "summary": "Get user profile",
+        "description": "Returns the authenticated user's profile details.",
+        "responses": {
+          "200": {
+            "description": "User profile retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "user": {
+                      "type": "object",
+                      "description": "Authenticated user details"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "summary": "Logout",
+        "description": "Logs out the authenticated user and clears the session.",
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Logout successful."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User not logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not logged in."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Logout failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Logout failed."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
