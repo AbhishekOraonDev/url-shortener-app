@@ -138,13 +138,17 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
             // Update analytics
             analyticsData = await updateAnalytics(analyticsData, userAgent, userIP);
 
+
             // Save to database and update cache
             if (analyticsData.isNew) {
                 await analyticsData.save();
             } else {
+                const analyticsDataToUpdate = { ...analyticsData.toObject() };
+                delete analyticsDataToUpdate._id;
+    
                 await Analytics.findOneAndUpdate(
                     { urlId: cachedUrl._id },
-                    analyticsData,
+                    analyticsDataToUpdate,
                     { upsert: true, returnDocument: 'after' }
                 );
             }
