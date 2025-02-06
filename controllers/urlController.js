@@ -48,7 +48,7 @@ const generateNewShortURL = catchAsyncError(async (req, res, next) => {
         }
 
 
-        // console.log("shortId: ", shortId);
+        console.log("shortId: ", shortId);
 
 
         const urlData = await URL.create({
@@ -93,7 +93,7 @@ const generateNewShortURL = catchAsyncError(async (req, res, next) => {
 const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
 
     // check for shortId in the url
-    const { shortId } = req.params;
+    const { shortId } = req.params
     if (!shortId) return next(new ErrorHandler("Error processing request, short Id not found.", 400));
 
     try {
@@ -109,9 +109,9 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
         }
 
         if (cachedUrl) {
-            cachedUrl = JSON.parse(cachedUrl);
+            cachedUrl = JSON.parse(cachedUrl)
             console.log("Cache Hit: Redirecting from Redis");
-            // console.log("cachedUrl: ", cachedUrl);
+            console.log("cachedUrl: ", cachedUrl);
 
             // Parse user agent and get IP
             const userAgent = req.headers["user-agent"];
@@ -138,17 +138,14 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
             // Update analytics
             analyticsData = await updateAnalytics(analyticsData, userAgent, userIP);
 
-
-            // Save or update analytics data
+            // Save to database and update cache
             if (!analyticsData._id) {
-                // If it's a new document, save it
                 await analyticsData.save();
             } else {
-                // If it's an existing document, update it
                 await Analytics.findOneAndUpdate(
-                    { _id: analyticsData._id },
+                    { urlId: cachedUrl._id },
                     analyticsData,
-                    { upsert: true, returnDocument: 'after' }
+                    { new: true, upsert: true }
                 );
             }
 
@@ -162,8 +159,6 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
 
         // Check for url data
         const urlData = await URL.findOne({ shortId: shortId });
-        console.log("shortId: ", shortId);
-        console.log("urlData: ", urlData);
         if (!urlData) return next(new ErrorHandler("Invalid URL.", 400));
 
         // Parse this to detect OS and device
@@ -252,7 +247,6 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
             }
         }
 
-        // Save the updated analytics data
         // Save or update analytics data
         if (!analyticsData._id) {
             // If it's a new document, save it
@@ -269,7 +263,7 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
         await redisClient.set(`analytics:${shortId}`, JSON.stringify(analyticsData), 'EX', 3600);
 
         // Cache the URL for future requests
-        await redisClient.set(`shortUrl:${shortId}`, JSON.stringify(urlData.redirectURL), 'EX', 86400);
+        await redisClient.set(`shortUrl:${shortId}`, urlData.redirectURL, 'EX', 86400);
 
         console.log("Cache Miss: Redirecting from DB");
 
