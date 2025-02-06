@@ -13,9 +13,9 @@ router.get("/google", passport.authenticate("google", {
 
 // Google OAuth callback route
 router.get("/google/callback",
-    passport.authenticate("google", { failureRedirect: "/auth/login-failed" }),
+    passport.authenticate("google", { failureRedirect: "https://url-shortener-app-production.up.railway.app/auth/login-failed" }),
     (req, res) => {
-        res.redirect("/auth/success");
+        res.redirect("https://url-shortener-app-production.up.railway.app/auth/success");
     }
 );
 
