@@ -4,17 +4,31 @@ import dotenv from "dotenv"
 dotenv.config();
 
 // Use the Redis service name from Docker Compose
-const redisClient = new Redis({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT || 6379,
-    password: process.env.REDIS_PASSWORD,
+// const redisClient = new Redis({
+//     host: process.env.REDIS_HOST,
+//     port: process.env.REDIS_PORT || 6379,
+//     password: process.env.REDIS_PASSWORD,
+//     retryStrategy: (times) => {
+//         const delay = Math.min(times * 50, 2000);
+//         return delay;
+//     },
+//     maxRetriesPerRequest: 3,
+//     enableReadyCheck: true,
+//     showFriendlyErrorStack: true
+// });
+
+
+const redisUrl = process.env.REDIS_URL;
+
+// Create a Redis client using the URL
+const redisClient = new Redis(redisUrl, {
     retryStrategy: (times) => {
         const delay = Math.min(times * 50, 2000);
         return delay;
     },
     maxRetriesPerRequest: 3,
     enableReadyCheck: true,
-    showFriendlyErrorStack: true
+    showFriendlyErrorStack: true,
 });
 
 
