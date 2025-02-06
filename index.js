@@ -5,6 +5,7 @@ import session from "express-session";
 import { connectDB } from './config/dbConnection.js';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 // Middlewares
 import ErrorMiddleware from './middleware/errorMiddleware.js';
@@ -23,6 +24,8 @@ const port = process.env.PORT || 3001;
 
 // -----------------Creating server-------------------
 const app = express();
+
+app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -49,6 +52,7 @@ app.use("/url", urlRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
 app.get("/:shortId", redirectToOriginalUrl);
+
 app.get("/health", (req, res) => {
     res.json({
         message: "Every thing is working fine"
