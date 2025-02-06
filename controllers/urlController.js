@@ -143,9 +143,18 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
             if (analyticsData.isNew) {
                 await analyticsData.save();
             } else {
-                const analyticsDataToUpdate = { ...analyticsData.toObject() };
-                delete analyticsDataToUpdate._id;
+                // const analyticsDataToUpdate = { ...analyticsData.toObject() };
+                // delete analyticsDataToUpdate._id;
     
+                // await Analytics.findOneAndUpdate(
+                //     { urlId: cachedUrl._id },
+                //     analyticsDataToUpdate,
+                //     { upsert: true, returnDocument: 'after' }
+                // );
+
+                const analyticsDataToUpdate = JSON.parse(JSON.stringify(analyticsData));
+                delete analyticsDataToUpdate._id;
+
                 await Analytics.findOneAndUpdate(
                     { urlId: cachedUrl._id },
                     analyticsDataToUpdate,
