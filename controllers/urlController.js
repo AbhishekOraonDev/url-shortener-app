@@ -170,14 +170,21 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
         if (!analyticsData) {
 
             // If analytics data is not present
-            analyticsData = new Analytics({
-                urlId: urlData._id,
-                totalClicks: 0,
-                uniqueUsers: { count: 0, uniqueUserIps: [] },
-                clicksByDate: [],
-                osType: [],
-                deviceType: [],
-            });
+            analyticsData = await Analytics.findOneAndUpdate(
+                { urlId: urlData._id }, 
+                { 
+                    $setOnInsert: {
+                        urlId: urlData._id,
+                        totalClicks: 0,
+                        uniqueUsers: { count: 0, uniqueUserIps: [] },
+                        clicksByDate: [],
+                        osType: [],
+                        deviceType: [],
+                    }
+                },
+                { new: true, upsert: true }
+            );
+            
         }
 
         // Update total clicks (Using IP for now might change to UUID store cookie)
