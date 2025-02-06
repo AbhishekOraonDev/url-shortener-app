@@ -5,13 +5,6 @@ dotenv.config();
 
 // Use the Redis service name from Docker Compose
 const redisClient = new Redis({
-    // username: 'default',
-    // password: process.env.REDIS_PASSWORD, 
-    // socket: {
-    //     host: 'redis-14518.crce182.ap-south-1-1.ec2.redns.redis-cloud.com',
-    //     port: 14518
-    // },
-    // host: "redis",  // Use service name instead of localhost
     host: process.env.REDIS_HOST,
     port: 6379,
 
