@@ -259,7 +259,9 @@
                     "description": "Optional topic/category for the URL."
                   }
                 },
-                "required": ["redirectURL"]
+                "required": [
+                  "redirectURL"
+                ]
               }
             }
           }
@@ -444,9 +446,8 @@
           }
         }
       }
-    }
-  },
-  "/analytics/{shortId}": {
+    },
+    "/analytics/{shortId}": {
       "get": {
         "summary": "Get analytics for a specific URL",
         "description": "Retrieves analytics data for a specific short URL, including total clicks, unique users, clicks by date, OS, and device data.",
@@ -983,7 +984,8 @@
           }
         }
       }
-    },
+    }
+  },
   "components": {
     "securitySchemes": {
       "bearerAuth": {
@@ -993,4 +995,4 @@
       }
     }
   }
-} 
+}
