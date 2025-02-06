@@ -8,7 +8,8 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 // Middlewares
-import ErrorMiddleware from './middleware/ErrorMiddleware.js';
+import errorMiddleware from './middleware/ErrorMiddleware.js';
+
 
 // Routers
 import authRoutes from './routes/authRoutes.js';
@@ -67,7 +68,7 @@ app.get("/", (req, res) => {
 })
 
 //--------------Error Middleware----------------
-app.use(ErrorMiddleware);
+app.use(errorMiddleware);
 
 //-------------Listening to server port---------------
 app.listen(port, () => {
