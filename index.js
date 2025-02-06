@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
 // Middlewares
-import ErrorMiddleware from './middleware/errorMiddleware.js';
+import ErrorMiddleware from './middleware/ErrorMiddleware.js';
 
 // Routers
 import authRoutes from './routes/authRoutes.js';

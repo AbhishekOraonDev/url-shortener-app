@@ -153,7 +153,7 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
             await redisClient.set(`analytics:${shortId}`, JSON.stringify(analyticsData), 'EX', 3600);
             await redisClient.expire(`shortUrl:${shortId}`, 86400); // Reset TTL
 
-            return res.redirect(302, cachedUrl.redirectURL);
+            return res.redirect(302, cachedUrl);
         }
 
 
