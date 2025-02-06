@@ -1,3 +1,5 @@
+// function for getting device type
+
 const getDeviceType = (userAgent) => {
     if (userAgent.includes("Mobile")) return "Mobile";
     if (userAgent.includes("Tablet")) return "Tablet";

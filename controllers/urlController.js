@@ -48,7 +48,7 @@ const generateNewShortURL = catchAsyncError(async (req, res, next) => {
         }
 
 
-        console.log("shortId: ", shortId);
+        // console.log("shortId: ", shortId);
 
 
         const urlData = await URL.create({

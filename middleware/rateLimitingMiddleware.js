@@ -1,3 +1,5 @@
+// For rate limitation 
+
 import rateLimit from "express-rate-limit"
 
 const reteLimiting = rateLimit({

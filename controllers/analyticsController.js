@@ -7,6 +7,7 @@ import redisClient from "../config/redisClient.js";
 const CACHE_EXPIRY = 600;
 
 
+// Get analytics as per specific url
 const getAnayticsSpecificUrl = catchAsyncError(async (req, res, next) => {
 
     const userId = req.user._id;
@@ -27,6 +28,7 @@ const getAnayticsSpecificUrl = catchAsyncError(async (req, res, next) => {
             return res.status(200).json(JSON.parse(cachedData));
         }
 
+        // finding url in DB
         const url = await URL.findOne({ shortId: shortId });
         if (!url) return next(new ErrorHandler("Invalid URL.", 404));
 
@@ -34,6 +36,7 @@ const getAnayticsSpecificUrl = catchAsyncError(async (req, res, next) => {
             return next(new ErrorHandler("Unauthorized!", 403));
         }
 
+        // find analytics data as per urlid
         const urlAnalytics = await Analytics.findOne({ urlId: url._id });
 
         if (!urlAnalytics) return next(new ErrorHandler("No analytics data found for this URL", 404));
@@ -56,6 +59,8 @@ const getAnayticsSpecificUrl = catchAsyncError(async (req, res, next) => {
 });
 
 
+
+// get overall analytics 
 const getOverallAnaytics = catchAsyncError(async (req, res, next) => {
     const userId = req.user._id;
 

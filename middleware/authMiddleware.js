@@ -7,7 +7,7 @@ export const isAuthenticated = (req, res, next) => {
     res.status(401).json({ message: "Unauthorized: Please log in to access this resource." });
 };
 
-// Middleware to check if user is authorized
+// Middleware to check if user is authorized (May add it later for roles)
 export const isAuthorized = (roles) => {
     return (req, res, next) => {
         if (!req.isAuthenticated()) {
