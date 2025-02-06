@@ -62,7 +62,7 @@ const generateNewShortURL = catchAsyncError(async (req, res, next) => {
         // await redisClient.del(`topicAnalytics:${topic}`);
         // await redisClient.del(``)
         try {
-            await redisClient.set(`shortUrl:${shortId}`, JSON.stringify(urlData), 'EX', 86400);
+            await redisClient.set(`shortUrl:${shortId}`, JSON.stringify(urlData.redirectURL), 'EX', 86400);
             await redisClient.del(`analytics:${shortId}`);
         } catch (error) {
             console.error("Redis error while setting short URL:", error);
