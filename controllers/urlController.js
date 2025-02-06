@@ -162,6 +162,8 @@ const redirectToOriginalUrl = catchAsyncError(async (req, res, next) => {
 
         // Check for url data
         const urlData = await URL.findOne({ shortId: shortId });
+        console.log("shortId: ", shortId);
+        console.log("urlData: ", urlData);
         if (!urlData) return next(new ErrorHandler("Invalid URL.", 400));
 
         // Parse this to detect OS and device
