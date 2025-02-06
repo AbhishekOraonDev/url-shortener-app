@@ -59,6 +59,13 @@ app.get("/health/test", (req, res) => {
     })
 })
 
+app.get("/", (req, res) => {
+    req.json({
+        success: true,
+        message: "This is an url-shortener backend application, developed by Abhishek Oraon."
+    })
+})
+
 //--------------Error Middleware----------------
 app.use(ErrorMiddleware);
 
