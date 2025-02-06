@@ -47,6 +47,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
+// Trust proxy in production
+app.set('trust proxy', 1);
+
+
 //----------------Routes------------------------
 app.use("/auth", authRoutes);
 app.use("/url", urlRoutes);
